@@ -21,9 +21,18 @@ import {
 import { Button } from "~/components/ui/button";
 import { Check, ChevronDown, Server } from "lucide-react";
 
-import { servers } from "constants";
+interface ServerSelectorProps {
+  servers: {
+    id: string;
+    name: string;
+    icon: string | null;
+    memberCount: number;
+  }[];
+};
 
-export const ServerSelector = () => {
+export const ServerSelector = ({
+  servers,
+}: ServerSelectorProps) => {
   const [open, setOpen] = useState(false)
   const [selectedServer, setSelectedServer] = useState(servers[0])
 
@@ -32,7 +41,7 @@ export const ServerSelector = () => {
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="w-56 justify-start gap-2 mb-10">
           <Avatar className="h-5 w-5">
-            <AvatarImage src={selectedServer.icon} alt={selectedServer.name} />
+            <AvatarImage src={selectedServer.icon!} alt={selectedServer.name} />
             <AvatarFallback>
               <Server className="h-3 w-3" />
             </AvatarFallback>
@@ -52,13 +61,14 @@ export const ServerSelector = () => {
                 <CommandItem
                   key={server.id}
                   onSelect={() => {
-                    setSelectedServer(server)
-                    setOpen(false)
+                    setSelectedServer(server);
+                    setOpen(false);
+                    window.history.pushState(null, "", `/servers/${server.id}`);
                   }}
                   className="flex items-center gap-2 mb-1"
                 >
                   <Avatar className="h-5 w-5">
-                    <AvatarImage src={server.icon} alt={server.name} />
+                    <AvatarImage src={server.icon!} alt={server.name} />
                     <AvatarFallback>
                       <Server className="h-3 w-3" />
                     </AvatarFallback>

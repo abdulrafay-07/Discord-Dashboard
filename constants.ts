@@ -1,50 +1,29 @@
 import { Command, Home, MessageSquare, Shield, Users } from "lucide-react";
 
-export const routes = [
+export const getRoutes = (serverId: string) => [
   {
-    href: "/",
+    href: `/servers/${serverId}`,
     icon: Home,
     title: "Dashboard",
   },
   {
-    href: "/members",
+    href: `/servers/${serverId}/members`,
     icon: Users,
     title: "Members",
   },
   {
-    href: "/roles",
+    href: `/servers/${serverId}/roles`,
     icon: Shield,
     title: "Roles",
   },
   {
-    href: "/logs",
+    href: `/servers/${serverId}/logs`,
     icon: Command,
     title: "Logs",
   },
   {
-    href: "/messaging",
+    href: `/servers/${serverId}/messaging`,
     icon: MessageSquare,
     title: "Messaging",
-  },
-];
-
-export const servers = [
-  { 
-    id: "1",
-    name: "Gaming Community",
-    icon: "/placeholder.svg?height=40&width=40",
-    memberCount: 1245,
-  },
-  {
-    id: "2",
-    name: "Developer Hub",
-    icon: "/placeholder.svg?height=40&width=40",
-    memberCount: 873,
-  },
-  {
-    id: "3",
-    name: "Study Group",
-    icon: "/placeholder.svg?height=40&width=40",
-    memberCount: 421,
   },
 ];

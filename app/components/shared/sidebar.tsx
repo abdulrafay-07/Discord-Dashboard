@@ -3,17 +3,36 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { ServerSelector } from "~/components/server-selector";
 import { Button } from "~/components/ui/button";
 
-import { routes } from "constants";
+import { getRoutes } from "../../../constants";
 
-export const Sidebar = () => {
+interface SidebarProps {
+  servers: {
+    id: string;
+    name: string;
+    icon: string | null;
+    memberCount: number;
+  }[];
+};
+
+export const Sidebar = ({
+  servers,
+}: SidebarProps) => {
   const pathname = useRouterState().location.pathname;
+
+  // Extract serverId from the pathname dynamically
+  const match = pathname.match(/^\/servers\/([^/]+)/);
+  
+  const serverId = match ? match[1] : null;
+  if (!serverId) return null;
+
+  const routes = getRoutes(serverId);
 
   return (
     <div className="h-screen w-64 border-r border-primary/20 py-6 px-4 bg-background flex flex-col">
       <h1 className="text-2xl font-semibold mb-10">
         Discordly
       </h1>
-      <ServerSelector />
+      <ServerSelector servers={servers} />
       <nav className="grid gap-1">
         {routes.map((route) => (
           <Button

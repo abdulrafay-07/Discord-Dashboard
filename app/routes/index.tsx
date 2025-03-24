@@ -1,6 +1,6 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 
-import { Sidebar } from "~/components/shared/sidebar";
+import { getServers } from "~/lib/bots/server";
 
 export const Route = createFileRoute("/")({
   beforeLoad: ({ context }) => {
@@ -11,15 +11,14 @@ export const Route = createFileRoute("/")({
     };
   },
   component: Home,
+  loader: async () => await getServers(),
 });
 
 function Home() {
-  return (  
-    <div className="flex">
-      <Sidebar />
-      <main className="flex-1 lg:pl-12">
-        <Outlet />
-      </main>
-    </div>
-  )
+  const router = useRouter();
+  const state = Route.useLoaderData();
+
+  router.navigate({ to: `/servers/${state.data[0].id}`, replace: true });
+
+  return null;
 };
