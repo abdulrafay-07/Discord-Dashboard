@@ -12,7 +12,7 @@ import { getWebRequest } from "@tanstack/react-start/server";
 import { ClerkProvider } from "@clerk/tanstack-start";
 import { getAuth } from "@clerk/tanstack-start/server";
 
-import "~/styles/index.css";
+import appCss from "~/styles/app.css?url";
 
 import { NotFound } from "~/components/not-found";
 import { DefaultCatchBoundary } from "~/components/default-catch-boundary";
@@ -37,6 +37,12 @@ export const Route = createRootRoute({
       },
       {
         title: "Discordly",
+      },
+    ],
+    links: [
+      {
+        rel: "stylesheet",
+        href: appCss,
       },
     ],
   }),

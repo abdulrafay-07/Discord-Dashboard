@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_auth/sign-up/$")({
 
 function SignUp() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen bg-amber-50">
       <SignUpComponent />
     </div>
   )
