@@ -11,6 +11,7 @@ export const getBotInstance = async () => {
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildPresences,
       ],
     });
 

@@ -20,6 +20,7 @@ import {
 } from "~/components/ui/popover";
 import { Button } from "~/components/ui/button";
 import { Check, ChevronDown, Server } from "lucide-react";
+import { useParams } from "@tanstack/react-router";
 
 interface ServerSelectorProps {
   servers: {
@@ -28,13 +29,15 @@ interface ServerSelectorProps {
     icon: string | null;
     memberCount: number;
   }[];
+  serverId: string;
 };
 
 export const ServerSelector = ({
   servers,
+  serverId,
 }: ServerSelectorProps) => {
-  const [open, setOpen] = useState(false)
-  const [selectedServer, setSelectedServer] = useState(servers[0])
+  const [open, setOpen] = useState(false);
+  const [selectedServer, setSelectedServer] = useState(servers.find((server) => server.id === serverId)!);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -65,7 +68,7 @@ export const ServerSelector = ({
                     setOpen(false);
                     window.history.pushState(null, "", `/servers/${server.id}`);
                   }}
-                  className="flex items-center gap-2 mb-1"
+                  className="flex items-center gap-2 mb-1 cursor-pointer"
                 >
                   <Avatar className="h-5 w-5">
                     <AvatarImage src={server.icon!} alt={server.name} />

@@ -12,7 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as ServersSplatImport } from './routes/servers/$'
+import { Route as ServersServerIdIndexImport } from './routes/servers/$serverId/index'
+import { Route as ServersServerIdMembersImport } from './routes/servers/$serverId/members'
 import { Route as AuthSignUpSplatImport } from './routes/_auth/sign-up/$'
 import { Route as AuthSignInSplatImport } from './routes/_auth/sign-in/$'
 
@@ -24,9 +25,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const ServersSplatRoute = ServersSplatImport.update({
-  id: '/servers/$',
-  path: '/servers/$',
+const ServersServerIdIndexRoute = ServersServerIdIndexImport.update({
+  id: '/servers/$serverId/',
+  path: '/servers/$serverId/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ServersServerIdMembersRoute = ServersServerIdMembersImport.update({
+  id: '/servers/$serverId/members',
+  path: '/servers/$serverId/members',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,13 +60,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/servers/$': {
-      id: '/servers/$'
-      path: '/servers/$'
-      fullPath: '/servers/$'
-      preLoaderRoute: typeof ServersSplatImport
-      parentRoute: typeof rootRoute
-    }
     '/_auth/sign-in/$': {
       id: '/_auth/sign-in/$'
       path: '/sign-in/$'
@@ -74,6 +74,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignUpSplatImport
       parentRoute: typeof rootRoute
     }
+    '/servers/$serverId/members': {
+      id: '/servers/$serverId/members'
+      path: '/servers/$serverId/members'
+      fullPath: '/servers/$serverId/members'
+      preLoaderRoute: typeof ServersServerIdMembersImport
+      parentRoute: typeof rootRoute
+    }
+    '/servers/$serverId/': {
+      id: '/servers/$serverId/'
+      path: '/servers/$serverId'
+      fullPath: '/servers/$serverId'
+      preLoaderRoute: typeof ServersServerIdIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -81,47 +95,68 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/servers/$': typeof ServersSplatRoute
   '/sign-in/$': typeof AuthSignInSplatRoute
   '/sign-up/$': typeof AuthSignUpSplatRoute
+  '/servers/$serverId/members': typeof ServersServerIdMembersRoute
+  '/servers/$serverId': typeof ServersServerIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/servers/$': typeof ServersSplatRoute
   '/sign-in/$': typeof AuthSignInSplatRoute
   '/sign-up/$': typeof AuthSignUpSplatRoute
+  '/servers/$serverId/members': typeof ServersServerIdMembersRoute
+  '/servers/$serverId': typeof ServersServerIdIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/servers/$': typeof ServersSplatRoute
   '/_auth/sign-in/$': typeof AuthSignInSplatRoute
   '/_auth/sign-up/$': typeof AuthSignUpSplatRoute
+  '/servers/$serverId/members': typeof ServersServerIdMembersRoute
+  '/servers/$serverId/': typeof ServersServerIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/servers/$' | '/sign-in/$' | '/sign-up/$'
+  fullPaths:
+    | '/'
+    | '/sign-in/$'
+    | '/sign-up/$'
+    | '/servers/$serverId/members'
+    | '/servers/$serverId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/servers/$' | '/sign-in/$' | '/sign-up/$'
-  id: '__root__' | '/' | '/servers/$' | '/_auth/sign-in/$' | '/_auth/sign-up/$'
+  to:
+    | '/'
+    | '/sign-in/$'
+    | '/sign-up/$'
+    | '/servers/$serverId/members'
+    | '/servers/$serverId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth/sign-in/$'
+    | '/_auth/sign-up/$'
+    | '/servers/$serverId/members'
+    | '/servers/$serverId/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ServersSplatRoute: typeof ServersSplatRoute
   AuthSignInSplatRoute: typeof AuthSignInSplatRoute
   AuthSignUpSplatRoute: typeof AuthSignUpSplatRoute
+  ServersServerIdMembersRoute: typeof ServersServerIdMembersRoute
+  ServersServerIdIndexRoute: typeof ServersServerIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ServersSplatRoute: ServersSplatRoute,
   AuthSignInSplatRoute: AuthSignInSplatRoute,
   AuthSignUpSplatRoute: AuthSignUpSplatRoute,
+  ServersServerIdMembersRoute: ServersServerIdMembersRoute,
+  ServersServerIdIndexRoute: ServersServerIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -135,22 +170,26 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/servers/$",
         "/_auth/sign-in/$",
-        "/_auth/sign-up/$"
+        "/_auth/sign-up/$",
+        "/servers/$serverId/members",
+        "/servers/$serverId/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/servers/$": {
-      "filePath": "servers/$.tsx"
     },
     "/_auth/sign-in/$": {
       "filePath": "_auth/sign-in/$.tsx"
     },
     "/_auth/sign-up/$": {
       "filePath": "_auth/sign-up/$.tsx"
+    },
+    "/servers/$serverId/members": {
+      "filePath": "servers/$serverId/members.tsx"
+    },
+    "/servers/$serverId/": {
+      "filePath": "servers/$serverId/index.tsx"
     }
   }
 }

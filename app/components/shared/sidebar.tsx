@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useMatch, useRouterState } from "@tanstack/react-router";
 
 import { ServerSelector } from "~/components/server-selector";
 import { Button } from "~/components/ui/button";
@@ -17,22 +17,18 @@ interface SidebarProps {
 export const Sidebar = ({
   servers,
 }: SidebarProps) => {
+  const match = useMatch("/servers/$serverId");
   const pathname = useRouterState().location.pathname;
 
-  // Extract serverId from the pathname dynamically
-  const match = pathname.match(/^\/servers\/([^/]+)/);
+  const { serverId } = match.params;
   
-  const serverId = match ? match[1] : null;
-  if (!serverId) return null;
+  const Id = serverId ?? servers[0]?.id;
 
-  const routes = getRoutes(serverId);
+  const routes = getRoutes(Id);
 
   return (
-    <div className="h-screen w-64 border-r border-primary/20 py-6 px-4 bg-background flex flex-col">
-      <h1 className="text-2xl font-semibold mb-10">
-        Discordly
-      </h1>
-      <ServerSelector servers={servers} />
+    <aside className="h-screen w-64 border-r border-primary/20 py-6 px-4 bg-background flex flex-col">
+      <ServerSelector servers={servers} serverId={Id} />
       <nav className="grid gap-1">
         {routes.map((route) => (
           <Button
@@ -48,6 +44,6 @@ export const Sidebar = ({
           </Button>
         ))}
       </nav>
-    </div>
+    </aside>
   )
 };

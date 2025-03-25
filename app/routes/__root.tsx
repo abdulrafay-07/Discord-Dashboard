@@ -17,13 +17,14 @@ import appCss from "~/styles/app.css?url";
 import { NotFound } from "~/components/not-found";
 import { DefaultCatchBoundary } from "~/components/default-catch-boundary";
 
-const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
-  const { userId } = await getAuth(getWebRequest()!)
+const fetchClerkAuth = createServerFn({ method: 'GET' })
+  .handler(async () => {
+    const { userId } = await getAuth(getWebRequest()!)
 
-  return {
-    userId,
-  }
-});
+    return {
+      userId,
+    }
+  });
 
 export const Route = createRootRoute({
   head: () => ({
@@ -36,7 +37,7 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "Discordly",
+        title: "Discord Bot Dashboard",
       },
     ],
     links: [
