@@ -7,5 +7,5 @@ export function cn(...inputs: ClassValue[]) {
 };
 
 export const formatStatus = (status: PresenceStatus): string => {
-  return status ? status.toUpperCase() : "INVISIBLE";
+  return status ? status.toUpperCase() : "OFFLINE";
 };

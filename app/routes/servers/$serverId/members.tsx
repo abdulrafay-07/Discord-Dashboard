@@ -46,8 +46,7 @@ function Members() {
         <DataTable
           columns={columns}
           data={state.members.data}
-          field="username"
-          fieldLabel="Username"
+          showFilters={true}
         />
       </main>
     </div>

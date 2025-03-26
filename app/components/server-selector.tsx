@@ -20,7 +20,6 @@ import {
 } from "~/components/ui/popover";
 import { Button } from "~/components/ui/button";
 import { Check, ChevronDown, Server } from "lucide-react";
-import { useParams } from "@tanstack/react-router";
 
 interface ServerSelectorProps {
   servers: {

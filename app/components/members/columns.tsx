@@ -93,12 +93,16 @@ export const columns: ColumnDef<Member>[] = [
         </div>
       );
     },
+    filterFn: (row, columnId, value) => {
+      return row.original.roles.some((role) => role.name.toLowerCase().includes(value.toLowerCase()));
+    },
   },
   {
     accessorKey: "joined",
     header: "Joined",
   },
   {
+    accessorKey: "actions",
     header: "Actions",
   }
 ];
