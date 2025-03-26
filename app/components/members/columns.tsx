@@ -3,9 +3,10 @@ import { PresenceStatus } from "discord.js";
 
 import { formatStatus } from "~/lib/utils";
 
+import { MemberActions } from "~/components/members/actions";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Badge } from "~/components/ui/badge";
 import { ArrowUpDown } from "lucide-react";
 
 export type Member = {
@@ -104,5 +105,12 @@ export const columns: ColumnDef<Member>[] = [
   {
     accessorKey: "actions",
     header: "Actions",
+    cell: ({ row }) => (
+      <MemberActions
+        id={row.original.id}
+        name={row.original.username}
+        avatar={row.original.avatar}
+      />
+    )
   }
 ];
