@@ -5,6 +5,7 @@ import {
   createRootRoute,
   HeadContent,
   Scripts,
+  useLoaderData,
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
@@ -15,7 +16,10 @@ import { getAuth } from "@clerk/tanstack-start/server";
 import appCss from "~/styles/app.css?url";
 
 import { NotFound } from "~/components/not-found";
+import { Sidebar } from "~/components/shared/sidebar";
 import { DefaultCatchBoundary } from "~/components/default-catch-boundary";
+
+import { getServers } from "~/lib/bot/get";
 
 const fetchClerkAuth = createServerFn({ method: 'GET' })
   .handler(async () => {
@@ -63,6 +67,12 @@ export const Route = createRootRoute({
   },
   notFoundComponent: () => <NotFound />,
   component: RootComponent,
+  loader: async ({ context }) => {
+    const { userId } = context;
+    const servers = await getServers();
+
+    return { servers, userId };
+  },
 });
 
 function RootComponent() {
@@ -76,13 +86,28 @@ function RootComponent() {
 };
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-  return (
+  const { userId, servers } = Route.useLoaderData();
+
+  return !userId ? (
     <html>
       <head>
         <HeadContent />
       </head>
       <body>
         {children}
+        <Scripts />
+      </body>
+    </html>
+  ) : (
+    <html>
+      <head>
+        <HeadContent />
+      </head>
+      <body className="flex">
+        <Sidebar servers={servers.data} />
+        <main className="flex-1 lg:px-12 py-6 lg:py-10">
+          {children}
+        </main>
         <Scripts />
       </body>
     </html>

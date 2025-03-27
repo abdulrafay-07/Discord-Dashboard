@@ -17,7 +17,6 @@ export const Route = createFileRoute("/")({
 function Home() {
   const router = useRouter();
   const state = Route.useLoaderData();
-  console.log(state.data);
 
   router.navigate({ to: `/servers/${state.data[0].id}`, replace: true });
 
