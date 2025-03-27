@@ -3,7 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { formatDistanceToNow } from "date-fns";
 
 import { getBotInstance } from "~/lib/bot/discord-bot";
-import { serverIdSchema, serverMemberSchema } from "schema";
+import { banSchema, kickSchema, serverIdSchema } from "schema";
 
 export const getServers = createServerFn({ method: "GET" })
   .handler(async () => {
@@ -49,39 +49,44 @@ export const getMembers = createServerFn({ method: "GET" })
   });
 
 export const kickUser = createServerFn({ method: "GET" })
-  .validator(serverMemberSchema)
-  .handler(async ({ data: { serverId, userId } }) => {
+  .validator(kickSchema)
+  .handler(async ({ data: { serverId, userId, reason } }) => {
     const client = await getBotInstance();
 
     const server = client.guilds.cache.get(serverId);
-    if (!server) return { message: "Server not found." };
+    if (!server) return { success: false, message: "Server not found" };
 
     const member = server.members.cache.get(userId);
-    if (!member) return { message: "Member not found." };
+    if (!member) return { success: false, message: "Member not found" };
 
     try {
-      await member.kick();
-      return { message: `User with ID ${userId} has been kicked successfully.` };
+      await member.kick(reason);
+      return { success: true, message: `${member.user.username} has been kicked successfully` };
     } catch (error: any) {
-      return { message: `Failed to kick user: ${error.message}` };
+      if (error.message === "Missing Permissions") return { success: false,  message: "Insufficient permissions" };
+      return { success: false, message: `Failed to kick user: ${error.message}` };
     };
   });
 
 export const banUser = createServerFn({ method: "GET" })
-  .validator(serverMemberSchema)
-  .handler(async ({ data: { serverId, userId } }) => {
+  .validator(banSchema)
+  .handler(async ({ data: { serverId, userId, reason, duration } }) => {
     const client = await getBotInstance();
 
     const server = client.guilds.cache.get(serverId);
-    if (!server) return { message: "Server not found." };
+    if (!server) return { success: false, message: "Server not found" };
 
     const member = server.members.cache.get(userId);
-    if (!member) return { message: "Member not found." };
+    if (!member) return { success: false, message: "Member not found" };
 
     try {
-      await member.ban({ deleteMessageSeconds: 0 });
-      return { message: `User with ID ${userId} has been banned successfully.` };
+      await member.ban({ deleteMessageSeconds: duration, reason });
+      return { success: true, message: `${member.user.username} has been banned successfully` };
     } catch (error: any) {
-      return { message: `Failed to banned user: ${error.message}` };
+      if (error.message === "Missing Permissions") return { success: false,  message: "Insufficient permissions" };
+      return { success: false, message: `Failed to ban user: ${error.message}` };
     };
   });
+
+// export const timeoutUser = createServerFn({ method: "GET" })
+  

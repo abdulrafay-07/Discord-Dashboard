@@ -109,7 +109,6 @@ export const columns: ColumnDef<Member>[] = [
       <MemberActions
         id={row.original.id}
         name={row.original.username}
-        avatar={row.original.avatar}
       />
     )
   }

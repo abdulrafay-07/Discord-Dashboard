@@ -14,26 +14,25 @@ import {
 import { DropdownMenuItem } from "~/components/ui/dropdown-menu";
 
 interface ConfirmDialogProps {
-  id: string;
-  name: string;
   trigger: string;
   title: string;
   description: string;
   buttonLabel: string;
   onClick: () => void;
+  onCancel: () => void;
+  children: React.ReactNode;
 };
 
 export const ConfirmDialog = ({
-  id,
-  name,
   trigger,
   title,
   description,
   buttonLabel,
   onClick,
+  onCancel,
+  children,
 }: ConfirmDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isPending, setIsPending] = useState(false);
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -50,8 +49,11 @@ export const ConfirmDialog = ({
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+
+        {children}
+
         <AlertDialogFooter>
-          <AlertDialogCancel>
+          <AlertDialogCancel onClick={onCancel}>
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction onClick={onClick}>

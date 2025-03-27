@@ -9,9 +9,10 @@ import {
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
-
 import { ClerkProvider } from "@clerk/tanstack-start";
 import { getAuth } from "@clerk/tanstack-start/server";
+
+import { Toaster } from "react-hot-toast";
 
 import appCss from "~/styles/app.css?url";
 
@@ -79,6 +80,7 @@ function RootComponent() {
   return (
     <ClerkProvider>
       <RootDocument>
+        <Toaster />
         <Outlet />
       </RootDocument>
     </ClerkProvider>
