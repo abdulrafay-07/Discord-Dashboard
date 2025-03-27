@@ -9,6 +9,8 @@ import { Button } from "~/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { ArrowUpDown } from "lucide-react";
 
+import { Role } from "types";
+
 export type Member = {
   id: string;
   username: string;
@@ -16,7 +18,7 @@ export type Member = {
   avatar: string | null;
   joined: string;
   status: PresenceStatus;
-  roles: { id: string; name: string }[];
+  roles: Role[];
 };
 
 const statusColors: Record<PresenceStatus, string> = {
@@ -84,7 +86,13 @@ export const columns: ColumnDef<Member>[] = [
       return (
         <div className="flex items-center gap-x-2">
           {visibleRoles.map((role) => (
-            <Badge key={role.id} variant="secondary">
+            <Badge
+              key={role.id}
+              variant="secondary"
+              style={{
+                color: role.color === "#000000" ? "white" : role.color,
+              }}
+            >
               {role.name}
             </Badge>
           ))}
@@ -109,6 +117,7 @@ export const columns: ColumnDef<Member>[] = [
       <MemberActions
         id={row.original.id}
         name={row.original.username}
+        roles={row.original.roles}
       />
     )
   }

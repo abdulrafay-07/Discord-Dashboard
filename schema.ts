@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { Role } from "types";
+
 export const serverIdSchema = z.object({
   serverId: z.string(),
 });
@@ -33,5 +35,12 @@ export const timeoutSchema = z.object({
     .min(60)
     .max(604800)
     .default(60)
-    .optional(),
+    .nullable(),
+});
+
+export const roleSchema = z.object({
+  serverId: z.string(),
+  userId: z.string(),
+  assignRoles: z.array(z.custom<Role>()),
+  removeRoles: z.array(z.custom<Role>()),
 })
