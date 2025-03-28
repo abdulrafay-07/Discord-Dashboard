@@ -36,7 +36,7 @@ export const getMembers = createServerFn({ method: "GET" })
       discriminator: member.user.discriminator,
       avatar: member.user.avatarURL(),
       joined: formatDistanceToNow(member.joinedAt!, { addSuffix: true }),
-      status: member.presence?.status,
+      status: member.presence?.status === undefined ? "invisible": member.presence?.status,
       roles: member.roles.cache.map((role) => ({
         id: role.id,
         name: role.name,
@@ -62,6 +62,8 @@ export const getRoles = createServerFn({ method: "GET" })
       id: role.id,
       name: role.name,
       color: role.hexColor,
+      permissions: role.permissions.toArray(),
+      membersLength: role.members.size,
     })).filter(r => r.name !== "@everyone");
 
     return {

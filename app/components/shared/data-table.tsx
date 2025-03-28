@@ -48,7 +48,7 @@ import { cn } from "~/lib/utils";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  showFilters: boolean;
+  showFilters?: boolean;
 };
 
 export function DataTable<TData, TValue>({
@@ -84,11 +84,11 @@ export function DataTable<TData, TValue>({
   const activeFiltersCount = columnFilters.length + (globalFilter ? 1 : 0);
 
   const statusOptions = [
-    { value: "ONLINE", label: "Online", color: "bg-green-500" },
-    { value: "IDLE", label: "Idle", color: "bg-yellow-500" },
-    { value: "DND", label: "Do Not Disturb", color: "bg-red-500" },
-    { value: "INVISIBLE", label: "Invisible", color: "bg-gray-500" },
-    { value: "OFFLINE", label: "Offline", color: "bg-gray-700" },
+    { value: "online", label: "Online", color: "bg-green-500" },
+    { value: "idle", label: "Idle", color: "bg-yellow-500" },
+    { value: "dnd", label: "Do Not Disturb", color: "bg-red-500" },
+    { value: "invisible", label: "Invisible", color: "bg-gray-500" },
+    { value: "offline", label: "Offline", color: "bg-gray-700" },
   ];
 
   return (
@@ -301,7 +301,7 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="py-4">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}

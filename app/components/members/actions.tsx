@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMatch } from "@tanstack/react-router";
+import { Role } from "types";
 
 import toast from "react-hot-toast";
 
@@ -7,6 +8,7 @@ import { ConfirmDialog } from "~/components/shared/confirm-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
@@ -14,7 +16,7 @@ import { Label } from "~/components/ui/label";
 import { Slider } from "~/components/ui/slider";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import { MoreHorizontal } from "lucide-react";
+import { Ban, Clock, Edit, MoreHorizontal, SquareMinus } from "lucide-react";
 
 import {
   banUser,
@@ -23,8 +25,6 @@ import {
   timeoutUser,
   updateRoles,
 } from "~/lib/bot/get";
-
-import { Role } from "types";
 
 interface MemberActionsProps {
   id: string;
@@ -141,7 +141,14 @@ export const MemberActions = ({
       <DropdownMenuContent align="end" className="p-0">
         {/* Timeout Dialog */}
         <ConfirmDialog
-          trigger="Timeout"
+          trigger={
+            <DropdownMenuItem
+              className="w-full px-3 py-2"
+              onSelect={(e) => e.preventDefault()}
+            >
+              <Clock /> Timeout
+            </DropdownMenuItem>
+          }
           buttonLabel={`Timeout ${name}`}
           title={`Are you sure you want to timeout ${name}?`}
           description={`This action cannot be undone. This will timeout ${name} from the server.`}
@@ -179,7 +186,14 @@ export const MemberActions = ({
 
         {/* Role Dialog */}
         <ConfirmDialog
-          trigger="Assign Roles"
+          trigger={
+            <DropdownMenuItem
+              className="w-full px-3 py-2"
+              onSelect={(e) => e.preventDefault()}
+            >
+              <Edit /> Edit Roles
+            </DropdownMenuItem>
+          }
           buttonLabel={`Update Roles`}
           title={`Update roles for ${name}`}
           description={`Select/Unselect the roles you want to assign to this user.`}
@@ -197,7 +211,6 @@ export const MemberActions = ({
           />
           {filteredRoles.map((role) => (
             <div key={role.id} className="flex items-center gap-2">
-
               <Checkbox
                 id={`role-${role.id}`}
                 defaultChecked={roles.some(r => r.id === role.id)}
@@ -227,7 +240,14 @@ export const MemberActions = ({
 
         {/* Kick Dialog */}
         <ConfirmDialog
-          trigger="Kick"
+          trigger={
+            <DropdownMenuItem
+              className="w-full px-3 py-2 text-red-400"
+              onSelect={(e) => e.preventDefault()}
+            >
+              <SquareMinus className="text-red-400" /> Kick
+            </DropdownMenuItem>
+          }
           buttonLabel={`Kick ${name}`}
           title={`Are you sure you want to kick ${name}?`}
           description={`This action cannot be undone. This will kick ${name} from the server.`}
@@ -250,7 +270,14 @@ export const MemberActions = ({
         
         {/* Ban Dialog */}
         <ConfirmDialog
-          trigger="Ban"
+          trigger={
+            <DropdownMenuItem
+              className="w-full px-3 py-2 text-red-400"
+              onSelect={(e) => e.preventDefault()}
+            >
+              <Ban className="text-red-400" /> Ban
+            </DropdownMenuItem>
+          }
           buttonLabel={`Ban ${name}`}
           title={`Are you sure you want to ban ${name}?`}
           description={`This action cannot be undone. This will ban ${name} from the server.`}

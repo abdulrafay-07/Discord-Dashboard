@@ -63,7 +63,7 @@ export const columns: ColumnDef<Member>[] = [
     cell: ({ row }) => (
       <div className="flex items-center gap-x-2">
         <div
-          className="w-3 h-3 rounded-full"
+          className="size-3 rounded-full"
           style={{
             backgroundColor: `${statusColors[row.original.status] ? statusColors[row.original.status] : "gray"}`,
           }}

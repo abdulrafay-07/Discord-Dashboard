@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import {
   AlertDialog,
@@ -11,10 +11,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
-import { DropdownMenuItem } from "~/components/ui/dropdown-menu";
 
 interface ConfirmDialogProps {
-  trigger: string;
+  trigger: React.ReactNode;
   title: string;
   description: string;
   buttonLabel: string;
@@ -37,12 +36,7 @@ export const ConfirmDialog = ({
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <DropdownMenuItem
-          className="w-full px-3 py-2"
-          onSelect={(e) => e.preventDefault()}
-        >
-          {trigger}
-        </DropdownMenuItem>
+        {trigger}
       </AlertDialogTrigger>
       <AlertDialogContent className="w-full">
         <AlertDialogHeader>
