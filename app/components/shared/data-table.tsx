@@ -93,23 +93,23 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      {showFilters && (
-        <div className="flex items-center justify-between flex-wrap py-4">
-          <div className="relative w-full sm:max-w-sm">
-            <Search className="absolute left-2.5 top-3 size-4 text-muted-foreground" />
-            <Input
-              placeholder="Search all columns..."
-              value={globalFilter}
-              onChange={(e) => setGlobalFilter(e.target.value)}
-              className="w-full pl-8 sm:w-[300px]"
-            />
-            {globalFilter && (
-              <Button variant="ghost" onClick={() => setGlobalFilter("")} className="absolute right-[5.15rem] -top-[1px] size p-0">
-                <X className="size-4" />
-                <span className="sr-only">Clear search</span>
-              </Button>
-            )}
-          </div>
+      <div className="flex items-center justify-between flex-wrap py-4">
+        <div className="relative w-full sm:max-w-sm">
+          <Search className="absolute left-2.5 top-3 size-4 text-muted-foreground" />
+          <Input
+            placeholder="Search all columns..."
+            value={globalFilter}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            className="w-full pl-8 sm:w-[300px]"
+          />
+          {globalFilter && (
+            <Button variant="ghost" onClick={() => setGlobalFilter("")} className="absolute right-[5.15rem] -top-[1px] size p-0">
+              <X className="size-4" />
+              <span className="sr-only">Clear search</span>
+            </Button>
+          )}
+        </div>
+        {showFilters && (
           <div className="flex items-center gap-2">
             <Popover>
               <PopoverTrigger asChild>
@@ -270,8 +270,8 @@ export function DataTable<TData, TValue>({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="rounded-md border">
         <Table>

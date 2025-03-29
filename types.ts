@@ -5,5 +5,11 @@ export interface Role {
   name: string;
   color: string;
   permissions: PermissionsString[];
-  membersLength: number;
+  members: {
+    id: string;
+    name: string;
+    discriminator: string;
+    avatar: string | null;
+    joined: string;
+  }[];
 };

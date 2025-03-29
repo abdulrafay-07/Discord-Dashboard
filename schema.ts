@@ -43,4 +43,24 @@ export const roleSchema = z.object({
   userId: z.string(),
   assignRoles: z.array(z.custom<Role>()),
   removeRoles: z.array(z.custom<Role>()),
-})
+});
+
+export const createRoleSchema = z.object({
+  serverId: z.string(),
+  roleName: z.string(),
+  color: z.string(),
+  permissions: z.array(z.string()),
+});
+
+export const updateRoleSchema = z.object({
+  serverId: z.string(),
+  roleId: z.string(),
+  roleName: z.string(),
+  color: z.string(),
+  permissions: z.array(z.string().optional()),
+});
+
+export const roleIdSchema = z.object({
+  serverId: z.string(),
+  roleId: z.string(),
+});

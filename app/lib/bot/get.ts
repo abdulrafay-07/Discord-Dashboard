@@ -1,9 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
+import { ColorResolvable, PermissionResolvable } from "discord.js";
 
 import { formatDistanceToNow } from "date-fns";
 
 import { getBotInstance } from "~/lib/bot/discord-bot";
-import { banSchema, kickSchema, roleSchema, serverIdSchema, timeoutSchema } from "schema";
+import { banSchema, createRoleSchema, kickSchema, roleIdSchema, roleSchema, serverIdSchema, timeoutSchema, updateRoleSchema } from "schema";
 
 export const getServers = createServerFn({ method: "GET" })
   .handler(async () => {
@@ -63,7 +64,13 @@ export const getRoles = createServerFn({ method: "GET" })
       name: role.name,
       color: role.hexColor,
       permissions: role.permissions.toArray(),
-      membersLength: role.members.size,
+      members: role.members.map(m => ({
+        id: m.id,
+        name: m.user.username,
+        discriminator: m.user.discriminator,
+        avatar: m.user.avatarURL(),
+        joined: formatDistanceToNow(m.joinedAt!, { addSuffix: true }),
+      })),
     })).filter(r => r.name !== "@everyone");
 
     return {
@@ -134,7 +141,7 @@ export const timeoutUser = createServerFn({ method: "GET" })
     };
   });
 
-export const updateRoles = createServerFn({ method: "GET" })
+export const updateMemberRoles = createServerFn({ method: "GET" })
   .validator(roleSchema)
   .handler(async ({ data: { serverId, userId, assignRoles, removeRoles } }) => {
     const client = await getBotInstance();
@@ -162,5 +169,73 @@ export const updateRoles = createServerFn({ method: "GET" })
     } catch (error: any) {
       if (error.message === "Missing Permissions") return { success: false,  message: "Insufficient permissions" };
       return { success: false, message: `Failed to timeout user: ${error.message}` };
+    };
+  });
+
+export const createRole = createServerFn({ method: "GET" })
+  .validator(createRoleSchema)
+  .handler(async ({ data: { serverId, roleName, color, permissions } }) => {
+    const client = await getBotInstance();
+
+    const server = client.guilds.cache.get(serverId);
+    if (!server) return { success: false, message: "Server not found" };
+
+    try {
+      const role = await server.roles.create({
+        name: roleName,
+        color: color as ColorResolvable,
+        permissions: permissions as PermissionResolvable[],
+      });
+
+      return { success: true, message: "Role created successfully" };
+    } catch (error: any) {
+      if (error.message === "Missing Permissions") return { success: false,  message: "Insufficient permissions" };
+      return { success: false, message: `Failed to create role: ${error.message}` };
+    };
+  });
+
+export const updateRole = createServerFn({ method: "GET" })
+  .validator(updateRoleSchema)
+  .handler(async ({ data: { serverId, roleId, roleName, color, permissions } }) => {
+    const client = await getBotInstance();
+
+    const server = client.guilds.cache.get(serverId);
+    if (!server) return { success: false, message: "Server not found" };
+
+    const role = server.roles.cache.get(roleId);
+    if (!role) return { success: false, message: "Role not found" };
+
+    try {
+      const updatedRole = await role.edit({
+        name: roleName,
+        color: color as ColorResolvable,
+        permissions: permissions as PermissionResolvable[],
+      });
+
+      return { success: true, message: "Role updated successfully" };
+    } catch (error: any) {
+      if (error.message === "Missing Permissions") return { success: false,  message: "Insufficient permissions" };
+      return { success: false, message: `Failed to update role: ${error.message}` };
+    };
+  });
+
+export const deleteRole = createServerFn({ method: "GET" })
+  .validator(roleIdSchema)
+  .handler(async ({ data: { roleId, serverId } }) => {
+    const client = await getBotInstance();
+
+    const server = client.guilds.cache.get(serverId);
+    if (!server) return { success: false, message: "Server not found" };
+
+    const role = server.roles.cache.get(roleId);
+    if (!role) return { success: false, message: "Role not found" };
+
+    try {
+      await role.delete();
+
+      return { success: true, message: "Role deleted successfully" };
+    } catch (error: any) {
+      if (error.message === "Missing Permissions") return { success: false,  message: "Insufficient permissions" };
+      return { success: false, message: `Failed to delete role: ${error.message}` };
     };
   });

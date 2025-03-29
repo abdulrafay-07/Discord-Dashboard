@@ -1,5 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 
+import { RoleActions } from "~/components/roles/actions";
 import { Badge } from "~/components/ui/badge";
 import { Users } from "lucide-react";
 
@@ -24,12 +25,12 @@ export const columns: ColumnDef<Role>[] = [
     )
   },
   {
-    accessorKey: "membersLength",
+    accessorKey: "members",
     header: "Members",
     cell: ({ row }) => (
       <div className="flex items-center gap-x-2">
         <Users className="size-4" />
-        {row.original.membersLength}
+        {row.original.members.length}
       </div>
     )
   },
@@ -43,5 +44,14 @@ export const columns: ColumnDef<Role>[] = [
         {row.original.permissions.includes("Administrator") ? "Administrator" : `${row.original.permissions.length} permissions`}
       </Badge>
     )
-  }
+  },
+  {
+      accessorKey: "actions",
+      header: "Actions",
+      cell: ({ row }) => (
+        <RoleActions
+          role={row.original}
+        />
+      )
+    }
 ];

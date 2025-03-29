@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useMatch } from "@tanstack/react-router";
-import { Role } from "types";
 
 import toast from "react-hot-toast";
 
@@ -16,6 +15,7 @@ import { Label } from "~/components/ui/label";
 import { Slider } from "~/components/ui/slider";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
+import { Separator } from "~/components/ui/separator";
 import { Ban, Clock, Edit, MoreHorizontal, SquareMinus } from "lucide-react";
 
 import {
@@ -23,8 +23,10 @@ import {
   getRoles,
   kickUser,
   timeoutUser,
-  updateRoles,
+  updateMemberRoles,
 } from "~/lib/bot/get";
+
+import { Role } from "types";
 
 interface MemberActionsProps {
   id: string;
@@ -119,7 +121,7 @@ export const MemberActions = ({
   const onRolesUpdate = async () => {
     setIsOpen(false);
 
-    const response = await updateRoles({ data: { serverId, userId: id, assignRoles, removeRoles } });
+    const response = await updateMemberRoles({ data: { serverId, userId: id, assignRoles, removeRoles } });
     if (!response.success) {
       toast.error(response.message);
       return;
@@ -133,8 +135,8 @@ export const MemberActions = ({
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8">
-          <MoreHorizontal className="h-4 w-4" />
+        <Button variant="ghost" size="icon" className="size-8">
+          <MoreHorizontal className="size-4" />
           <span className="sr-only">Actions</span>
         </Button>
       </DropdownMenuTrigger>
@@ -237,6 +239,8 @@ export const MemberActions = ({
             </div>
           ))}
         </ConfirmDialog>
+
+        <Separator />
 
         {/* Kick Dialog */}
         <ConfirmDialog
